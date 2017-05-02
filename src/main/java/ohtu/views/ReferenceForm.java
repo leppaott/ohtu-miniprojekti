@@ -20,18 +20,15 @@ import ohtu.views.AddView.AddViewListener;
 public class ReferenceForm extends VerticalLayout {
 
     private List<TextField> fields;
-    private List<String> fieldNames;
-
+    
     private List<TextField> reqFields;
     private List<String> reqFieldNames;
     private List<TextField> optFields;
     private List<String> optFieldNames;
 
-
     private Button send = new Button("Add", e -> saveReference());
     private AddViewListener listener;
     private String type;
-
 
     public ReferenceForm(String referenceType) {
 
@@ -41,7 +38,11 @@ public class ReferenceForm extends VerticalLayout {
         reqFields = new ArrayList<>();
         Notification.show(referenceType);
         reqFieldNames = Arrays.asList(Fields.getRequired(type));
-        reqFieldNames.forEach(s -> reqFields.add(new TextField(s)));
+        reqFieldNames.forEach(s -> {
+        	TextField field = new TextField(s);
+        	field.setRequiredIndicatorVisible(true);
+        	reqFields.add(field);
+        });
         reqFields.forEach(f -> addComponent(f));
 
         // Add a couple of empty rows to make form easier to read
@@ -56,9 +57,9 @@ public class ReferenceForm extends VerticalLayout {
 
         // This initialization is done only for easý saving
         fields = new ArrayList<>();
-        fields = reqFields;
+        fields.addAll(reqFields);
         fields.addAll(optFields);
-
+        
         send.setId("addRef");
         addComponent(send); 
     }

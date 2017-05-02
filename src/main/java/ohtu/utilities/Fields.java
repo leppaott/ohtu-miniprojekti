@@ -13,48 +13,36 @@ import java.util.HashMap;
  */
 public class Fields {
     
-    static HashMap<String, String[]> required = new HashMap();
-    static HashMap<String, String[]> optional = new HashMap();
-    
-    public Fields() {
-        initRequired();
-        initOptional();
-    }
-    
-    public static String[] getRequired (String key) {
-    
-        String keyLowercase = key.toLowerCase();
-        
-        if(required.containsKey(keyLowercase)) {
-            return required.get(keyLowercase);
-        }
-        return null;
-    }
-    
-    public static String[] getOptional (String key) {
-    
-        String keyLowercase = key.toLowerCase();
-        
-        if(optional.containsKey(keyLowercase)) {
-            return optional.get(keyLowercase);
-        }
-        return null;
-    }
-    
-    public static String[] getAll (String key) {
-        String keyLowercase = key.toLowerCase();
-        String[] ret = new String[required.get(keyLowercase).length + optional.get(keyLowercase).length];
-        int helper = 0;
-        for(int i = 0; i < required.get(keyLowercase).length; i++){
-            ret[helper] = required.get(keyLowercase)[i];
-            helper++;
-        }
-        for(int i = 0; i < optional.get(keyLowercase).length; i++){
-            ret[helper] = optional.get(keyLowercase)[i];
-            helper++;
-        }
-        return ret;
-    }
+	static HashMap<String, String[]> required = new HashMap<>();
+	static HashMap<String, String[]> optional = new HashMap<>();
+
+	public Fields() {
+		initRequired();
+		initOptional();
+	}
+
+	public static String[] getRequired(String key) {
+		return required.get(key.toLowerCase());
+	}
+
+	public static String[] getOptional(String key) {
+		return optional.get(key.toLowerCase());
+	}
+
+	public static String[] getAll(String key) {
+		String keyLowercase = key.toLowerCase();
+		String[] ret = new String[required.get(keyLowercase).length + optional.get(keyLowercase).length];
+		int helper = 0;
+		for (int i = 0; i < required.get(keyLowercase).length; i++) {
+			ret[helper] = required.get(keyLowercase)[i];
+			helper++;
+		}
+		for (int i = 0; i < optional.get(keyLowercase).length; i++) {
+			ret[helper] = optional.get(keyLowercase)[i];
+			helper++;
+		}
+		return ret;
+	}
     
     private void initRequired() {
         required.put("article",         new String[]{"author", "title", "journal", "year", "volume"});

@@ -29,6 +29,7 @@ public class AddViewImpl extends VerticalLayout implements AddView {
         referenceTypes = new ComboBox<>("Select reference type");
         referenceTypes.setItems(refTypes());
         referenceTypes.setValue("article");
+        referenceTypes.setEmptySelectionAllowed(false);
         form = new ReferenceForm("article");
         referenceTypes.addValueChangeListener(event -> { 
                 removeComponent(form);

@@ -18,7 +18,7 @@ public class Reference {
 		validators = new ArrayList<>();
 		validators.add(new CommonValidator());
 	}
-	
+
 	public Reference(Map<String, String> input) {
 		this();
 		input.forEach((k, v) -> set(k, v));
@@ -45,15 +45,15 @@ public class Reference {
 	public String getYear() {
 		return get("year");
 	}
-	
+
 	public String getJournal() {
 		return get("journal");
 	}
-	
+
 	public String getKey() {
 		return get("key");
 	}
-	
+
 	public String getType() {
 		return get("type");
 	}
@@ -61,18 +61,17 @@ public class Reference {
 	public void addValidator(ReferenceValidator validator) {
 		this.validators.add(validator);
 	}
-	
+
 	public boolean isValid() {
 		return validators.stream().allMatch(v -> v.isValid(this));
 	}
-	
+
 	public String toBibTex() {
 		StringBuilder sb = new StringBuilder("@" + getType() + "{" + getKey() + ",\n");
-		
-		fields.entrySet().stream()
-			.filter(e->!e.getKey().equals("type") && !e.getKey().equals("key"))
-			.forEach(e->sb.append("\t" + e.getKey() + "=" + "{" + Encode.toBibTex(e.getValue()) + "},\n"));
-		
+
+		fields.entrySet().stream().filter(e -> !e.getKey().equals("type") && !e.getKey().equals("key"))
+				.forEach(e -> sb.append("\t" + e.getKey() + "=" + "{" + Encode.toBibTex(e.getValue()) + "},\n"));
+
 		return sb.append("}").toString();
 	}
 }

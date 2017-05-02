@@ -10,71 +10,65 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class AddViewImpl extends VerticalLayout implements AddView {
-    private Button previousButton;
-    private ComboBox<String> referenceTypes;
-    private ReferenceForm form;
-    AddViewListener listener;
+	private Button previousButton;
+	private ComboBox<String> referenceTypes;
+	private ReferenceForm form;
+	AddViewListener listener;
 
-    public AddViewImpl() {
-        setSizeUndefined();
+	public AddViewImpl() {
+		setSizeUndefined();
 
-        previousButton = new Button("Go Back", e -> UI.getCurrent().getNavigator().navigateTo(""));
-        previousButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        previousButton.setHeightUndefined();
-        previousButton.setId("previousButton");
+		previousButton = new Button("Go Back", e -> UI.getCurrent().getNavigator().navigateTo(""));
+		previousButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+		previousButton.setHeightUndefined();
+		previousButton.setId("previousButton");
 
-        referenceTypes = new ComboBox<>("Select reference type");
-        referenceTypes.setItems(refTypes());
-        referenceTypes.setValue("article");
-        referenceTypes.setEmptySelectionAllowed(false);
-        form = new ReferenceForm("article");
-        referenceTypes.addValueChangeListener(event -> { 
-                removeComponent(form);
-                form = new ReferenceForm(referenceTypes.getValue());
-                form.setListener(listener);
-                addComponent(form);
-            });
+		referenceTypes = new ComboBox<>("Select reference type");
+		referenceTypes.setItems(refTypes());
+		referenceTypes.setValue("article");
+		referenceTypes.setEmptySelectionAllowed(false);
+		form = new ReferenceForm("article");
+		referenceTypes.addValueChangeListener(event -> {
+			removeComponent(form);
+			form = new ReferenceForm(referenceTypes.getValue());
+			form.setListener(listener);
+			addComponent(form);
+		});
 
-        addComponents(previousButton, referenceTypes, form);
-    }
+		addComponents(previousButton, referenceTypes, form);
+	}
 
-    public void setListener(AddViewListener listener) {
+	public void setListener(AddViewListener listener) {
 
-        //Saving listener to be updated when combobox value is changed
-        this.listener = listener;
-        form.setListener(listener);
-    }
+		// Saving listener to be updated when combobox value is changed
+		this.listener = listener;
+		form.setListener(listener);
+	}
 
-    @Override
-    public void success() {
-        Notification.show("Reference saved!");
-        UI.getCurrent().getNavigator().navigateTo("");
-        form.empty();
-    }
+	@Override
+	public void success() {
+		Notification.show("Reference saved!");
+		UI.getCurrent().getNavigator().navigateTo("");
+		form.empty();
+	}
 
-    @Override
-    public void failure() {
-        Notification.show("Failed to save a reference");
-    }
+	@Override
+	public void failure() {
+		Notification.show("Failed to save a reference");
+	}
 
-    @Override
-    public void enter(ViewChangeEvent event) {
-        // TODO Auto-generated method stub
-    }
+	@Override
+	public void enter(ViewChangeEvent event) {
+		// TODO Auto-generated method stub
+	}
 
-    private ArrayList<String> refTypes() {
-        ArrayList<String> refs = new ArrayList<>();
-        refs.add("article");        refs.add("book");
-        refs.add("booklet");        refs.add("conference");
-        refs.add("inbook");         refs.add("incollection");
-        refs.add("inproceedings");  refs.add("manual");
-        refs.add("mastersthesis");  refs.add("misc");
-        refs.add("phdthesis");      refs.add("proceedings");
-        refs.add("techreport");     refs.add("unpublished");
-
-        return refs;
-    }
+	private List<String> refTypes() {
+		return Arrays.asList("article", "book", "booklet", "conference", "inbook", "incollection", "inproceedings",
+				"manual", "mastersthesis", "misc", "phdthesis", "proceedings", "techreport", "unpublished");
+	}
 }

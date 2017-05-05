@@ -19,66 +19,70 @@ import ohtu.views.AddView.AddViewListener;
 @SuppressWarnings("serial")
 public class ReferenceForm extends VerticalLayout {
 
-    private List<TextField> fields;
-    
-    private List<TextField> reqFields;
-    private List<String> reqFieldNames;
-    private List<TextField> optFields;
-    private List<String> optFieldNames;
+	private List<TextField> fields;
 
-    private Button send = new Button("Add", e -> saveReference());
-    private AddViewListener listener;
-    private String type;
+	private List<TextField> reqFields;
+	private List<String> reqFieldNames;
+	private List<TextField> optFields;
+	private List<String> optFieldNames;
 
-    public ReferenceForm(String referenceType) {
+	private Button send = new Button("Add", e -> saveReference());
+	private AddViewListener listener;
+	private String type;
 
-        type = referenceType;
+	public ReferenceForm(String referenceType) {
 
-        addComponent(new Label("Required"));
-        reqFields = new ArrayList<>();
-        Notification.show(referenceType);
-        reqFieldNames = Arrays.asList(Fields.getRequired(type));
-        reqFieldNames.forEach(s -> {
-        	TextField field = new TextField(s);
-        	field.setRequiredIndicatorVisible(true);
-        	reqFields.add(field);
-        });
-        reqFields.forEach(f -> addComponent(f));
+		type = referenceType;
 
-        // Add a couple of empty rows to make form easier to read
-        addComponent(new Label(" "));
-        addComponent(new Label(" "));
+		addComponent(new Label("Required"));
+		reqFields = new ArrayList<>();
+		Notification.show(referenceType);
+		reqFieldNames = Arrays.asList(Fields.getRequired(type));
+		reqFieldNames.forEach(s -> {
+			TextField field = new TextField(s);
+			field.setRequiredIndicatorVisible(true);
+			reqFields.add(field);
+		});
+		reqFields.forEach(f -> addComponent(f));
 
-        addComponent(new Label("Optional"));
-        optFields = new ArrayList<>();
-        optFieldNames = Arrays.asList(Fields.getOptional(type));
-        optFieldNames.forEach(s -> optFields.add(new TextField(s)));
-        optFields.forEach(f -> addComponent(f));
+		// Add a couple of empty rows to make form easier to read
+		addComponent(new Label(" "));
+		addComponent(new Label(" "));
 
-        // This initialization is done only for easý saving
-        fields = new ArrayList<>();
-        fields.addAll(reqFields);
-        fields.addAll(optFields);
-        
-        send.setId("addRef");
-        addComponent(send); 
-    }
+		addComponent(new Label("Optional"));
+		optFields = new ArrayList<>();
+		optFieldNames = Arrays.asList(Fields.getOptional(type));
+		optFieldNames.forEach(s -> optFields.add(new TextField(s)));
+		optFields.forEach(f -> addComponent(f));
 
-    private void saveReference() {
-        if (listener == null) return;
+		// This initialization is done only for easý saving
+		fields = new ArrayList<>();
+		fields.addAll(reqFields);
+		fields.addAll(optFields);
 
-        Map<String, String> input = new HashMap<>();
-        input.put("TYPE", type);
-        fields.forEach(f -> input.put(f.getCaption(), f.getValue()));
+		send.setId("addRef");
+		addComponent(send);
+	}
 
-        listener.saveReference(input);
-    }
+	private void saveReference() {
+		if (listener == null)
+			return;
 
-    public void setListener(AddViewListener listener) {
-        this.listener = listener;
-    }
+		Map<String, String> input = new HashMap<>();
+		fields.forEach(f -> {
+			if (!"".equals(f.getValue()))
+				input.put(f.getCaption(), f.getValue());
+		});
+		input.put("type", type);
 
-    public void empty() {
-        fields.forEach(f -> f.clear());
-    }
+		listener.saveReference(input);
+	}
+
+	public void setListener(AddViewListener listener) {
+		this.listener = listener;
+	}
+
+	public void empty() {
+		fields.forEach(f -> f.clear());
+	}
 }
